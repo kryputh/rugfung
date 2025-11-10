@@ -20,7 +20,7 @@ bot.start(async (ctx) => {
     parse_mode: 'Markdown',
     ...Markup.inlineKeyboard([
       [Markup.button.callback('🧭 QUEST', 'quest')],
-      [Markup.button.callback('🏠 HOME', 'home')]
+      [Markup.button.webApp('🏠 HOME', 'https://t.me/SolpotMiniAppBot/Solpot')]
     ])
   });
 });
@@ -34,7 +34,7 @@ bot.action('quest', async (ctx) => {
       caption: '🎁 Open Quest Box on Mini App to check your Mini App Quest Reward!',
       parse_mode: 'Markdown',
       ...Markup.inlineKeyboard([
-        [Markup.button.callback('🏠 HOME', 'home')]
+        [Markup.button.webApp('🏠 HOME', 'https://t.me/SolpotMiniAppBot/Solpot')]
       ])
     }
   );
@@ -55,5 +55,6 @@ bot.action('home', async (ctx) => {
 // ===== LAUNCH BOT =====
 bot.launch();
 console.log('🤖 SOLPOT Mini App Bot running...');
+
 
 
