@@ -5,7 +5,7 @@ const { Telegraf, Markup } = require('telegraf');
 const express = require('express');
 
 // ===== CONFIG =====
-const BOT_TOKEN = '8203617051:AAG7maOgU4_tI7sh6qmBv3SRF6Xgi1bCip8'; // Replace with real token
+const BOT_TOKEN = '8203617051:AAHNaGD-ggpb9ir5eyga1mVO-xRfQ7SDX4c'; // Replace with real token
 const LOG_CHANNEL_ID = '-1003381218991'; // Replace with your log channel
 const bot = new Telegraf(BOT_TOKEN);
 // ===== WELCOME MESSAGE =====
@@ -55,6 +55,7 @@ bot.action('home', async (ctx) => {
 // ===== LAUNCH BOT =====
 bot.launch();
 console.log('🤖 SOLPOT Mini App Bot running...');
+
 
 
 
