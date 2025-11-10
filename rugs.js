@@ -29,7 +29,7 @@ bot.start((ctx) => ctx.reply(welcomeMessage,
 
 bot.action('quest', async (ctx) => {
   await ctx.answerCbQuery();
-  await ctx.replyWithPhoto({ url: 'https://i.postimg.cc/VNqgM1j6/download.webp' }, {
+  await ctx.replyWithPhoto({ url: 'https://i.postimg.cc/XJYkGP4H/Untitled-design.png' }, {
     caption: '🎁 Open Quest Box on Mini App to check your Mini App Quest Reward!',
     reply_markup: { inline_keyboard: [[{ text:'🏠 OPEN MINI APP', url: MINI_APP_DEEPLINK }]] }
   });
@@ -54,4 +54,5 @@ app.listen(PORT, async () => {
     console.warn('WEBHOOK_URL not configured, webhook not set. Set WEBHOOK_URL to your service URL.');
   }
 });
+
 
