@@ -3,9 +3,6 @@
 
 const { Telegraf, Markup } = require('telegraf');
 const express = require('express');
-place with your log channel
-
-
 const BOT_TOKEN = process.env.BOT_TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL; // e.g. https://rugfung-1.onrender.com
 const WEBHOOK_PATH = process.env.WEBHOOK_PATH || '/webhook';
@@ -57,3 +54,4 @@ app.listen(PORT, async () => {
     console.warn('WEBHOOK_URL not configured, webhook not set. Set WEBHOOK_URL to your service URL.');
   }
 });
+
