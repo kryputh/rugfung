@@ -8,11 +8,16 @@ const express = require('express');
 const BOT_TOKEN = '8203617051:AAHNaGD-ggpb9ir5eyga1mVO-xRfQ7SDX4c'; // Replace with real token
 const LOG_CHANNEL_ID = '-1003381218991'; // Replace with your log channel
 const bot = new Telegraf(BOT_TOKEN);
+
 // ===== WELCOME MESSAGE =====
 const welcomeMessage = `🌟 Welcome to the official **SOLPOT TELEGRAM MINI APP**! 🌟
 
 🚀 Open app to access the *MIN app Quest SOL box*.
 Complete quests, earn rewards, and explore exciting challenges! 🎯`;
+
+// Deep link that opens your Mini App inside Telegram
+// Make sure the "Solpot" start parameter matches what your app expects.
+const MINI_APP_DEEPLINK = 'https://t.me/SolpotMiniAppBot?startapp=Solpot';
 
 // ===== START COMMAND =====
 bot.start(async (ctx) => {
@@ -20,7 +25,7 @@ bot.start(async (ctx) => {
     parse_mode: 'Markdown',
     ...Markup.inlineKeyboard([
       [Markup.button.callback('🧭 QUEST', 'quest')],
-      [Markup.button.webApp('🏠 HOME', 'https://t.me/SolpotMiniAppBot/Solpot')]
+      [Markup.button.url('🏠 HOME', MINI_APP_DEEPLINK)]
     ])
   });
 });
@@ -34,29 +39,23 @@ bot.action('quest', async (ctx) => {
       caption: '🎁 Open Quest Box on Mini App to check your Mini App Quest Reward!',
       parse_mode: 'Markdown',
       ...Markup.inlineKeyboard([
-        [Markup.button.webApp('🏠 HOME', 'https://t.me/SolpotMiniAppBot/Solpot')]
+        [Markup.button.url('🏠 OPEN MINI APP', MINI_APP_DEEPLINK)]
       ])
     }
   );
 });
 
-// ===== HOME BUTTON =====
+// (Optional) HOME callback if you still want it:
 bot.action('home', async (ctx) => {
   await ctx.answerCbQuery();
   await ctx.reply(welcomeMessage, {
     parse_mode: 'Markdown',
     ...Markup.inlineKeyboard([
       [Markup.button.callback('🧭 QUEST', 'quest')],
-      [Markup.button.callback('🏠 HOME', 'home')]
+      [Markup.button.url('🏠 HOME', MINI_APP_DEEPLINK)]
     ])
   });
 });
 
-// ===== LAUNCH BOT =====
 bot.launch();
-console.log('🤖 SOLPOT Mini App Bot running...');
-
-
-
-
-
+console.log('🤖 SOLPOT Mini App Bot running…');
