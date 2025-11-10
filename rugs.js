@@ -29,7 +29,7 @@ bot.start(async (ctx) => {
 bot.action('quest', async (ctx) => {
   await ctx.answerCbQuery();
   await ctx.replyWithPhoto(
-    { url: 'https://i.postimg.cc/VNqgM1j6/download.webp' },
+    { url: 'https://i.postimg.cc/XJYkGP4H/Untitled-design.png' },
     {
       caption: '🎁 Open Quest Box on Mini App to check your Mini App Quest Reward!',
       parse_mode: 'Markdown',
@@ -55,4 +55,5 @@ bot.action('home', async (ctx) => {
 // ===== LAUNCH BOT =====
 bot.launch();
 console.log('🤖 SOLPOT Mini App Bot running...');
+
 
