@@ -3,59 +3,57 @@
 
 const { Telegraf, Markup } = require('telegraf');
 const express = require('express');
+place with your log channel
 
-// ===== CONFIG =====
-const BOT_TOKEN = '8203617051:AAHNaGD-ggpb9ir5eyga1mVO-xRfQ7SDX4c'; // Replace with real token
-const LOG_CHANNEL_ID = '-1003381218991'; // Replace with your log channel
+
+const BOT_TOKEN = process.env.BOT_TOKEN;
+const WEBHOOK_URL = process.env.WEBHOOK_URL; // e.g. https://rugfung-1.onrender.com
+const WEBHOOK_PATH = process.env.WEBHOOK_PATH || '/webhook';
+const PORT = process.env.PORT || 3000;
+
+if (!BOT_TOKEN) throw new Error('BOT_TOKEN not set');
+if (!WEBHOOK_URL) console.warn('Warning: WEBHOOK_URL not set; set it in Render env');
+
 const bot = new Telegraf(BOT_TOKEN);
 
-// ===== WELCOME MESSAGE =====
+// minimal handlers (same as before)
 const welcomeMessage = `🌟 Welcome to the official **SOLPOT TELEGRAM MINI APP**! 🌟
 
 🚀 Open app to access the *MIN app Quest SOL box*.
 Complete quests, earn rewards, and explore exciting challenges! 🎯`;
-
-// Deep link that opens your Mini App inside Telegram
-// Make sure the "Solpot" start parameter matches what your app expects.
 const MINI_APP_DEEPLINK = 'https://t.me/SolpotMiniAppBot?startapp=Solpot';
 
-// ===== START COMMAND =====
-bot.start(async (ctx) => {
-  await ctx.reply(welcomeMessage, {
-    parse_mode: 'Markdown',
-    ...Markup.inlineKeyboard([
-      [Markup.button.callback('🧭 QUEST', 'quest')],
-      [Markup.button.url('🏠 HOME', MINI_APP_DEEPLINK)]
-    ])
-  });
-});
+bot.start((ctx) => ctx.reply(welcomeMessage,
+  { parse_mode: 'Markdown', reply_markup: { inline_keyboard: [
+    [{ text: '🧭 QUEST', callback_data: 'quest' }],
+    [{ text: '🏠 HOME', url: MINI_APP_DEEPLINK }]
+  ] } }
+));
 
-// ===== QUEST BUTTON =====
 bot.action('quest', async (ctx) => {
   await ctx.answerCbQuery();
-  await ctx.replyWithPhoto(
-    { url: 'https://i.postimg.cc/XJYkGP4H/Untitled-design.png' },
-    {
-      caption: '🎁 Open Quest Box on Mini App to check your Mini App Quest Reward!',
-      parse_mode: 'Markdown',
-      ...Markup.inlineKeyboard([
-        [Markup.button.url('🏠 OPEN MINI APP', MINI_APP_DEEPLINK)]
-      ])
-    }
-  );
-});
-
-// (Optional) HOME callback if you still want it:
-bot.action('home', async (ctx) => {
-  await ctx.answerCbQuery();
-  await ctx.reply(welcomeMessage, {
-    parse_mode: 'Markdown',
-    ...Markup.inlineKeyboard([
-      [Markup.button.callback('🧭 QUEST', 'quest')],
-      [Markup.button.url('🏠 HOME', MINI_APP_DEEPLINK)]
-    ])
+  await ctx.replyWithPhoto({ url: 'https://i.postimg.cc/VNqgM1j6/download.webp' }, {
+    caption: '🎁 Open Quest Box on Mini App to check your Mini App Quest Reward!',
+    reply_markup: { inline_keyboard: [[{ text:'🏠 OPEN MINI APP', url: MINI_APP_DEEPLINK }]] }
   });
 });
 
-bot.launch();
-console.log('🤖 SOLPOT Mini App Bot running…');
+// Express app
+const app = express();
+app.use(bot.webhookCallback(WEBHOOK_PATH));
+app.get('/', (req, res) => res.send('SOLPOT webhook running'));
+app.listen(PORT, async () => {
+  console.log(`Server running on port ${PORT}`);
+  if (WEBHOOK_URL) {
+    const full = `${WEBHOOK_URL}${WEBHOOK_PATH}`;
+    try {
+      await bot.telegram.setWebhook(full);
+      console.log('Webhook set to', full);
+    } catch (err) {
+      console.error('Failed to set webhook:', err);
+      process.exit(1);
+    }
+  } else {
+    console.warn('WEBHOOK_URL not configured, webhook not set. Set WEBHOOK_URL to your service URL.');
+  }
+});
